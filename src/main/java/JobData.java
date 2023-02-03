@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -79,7 +76,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -98,9 +95,21 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        // TODO - implement this method
-        return null;
+        ArrayList<HashMap<String, String>> data = findAll();
+        ArrayList<HashMap<String, String>> searchResults = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+
+            for (Map.Entry<String, String> entry : data.get(i).entrySet()) {
+                if (entry.getValue().toLowerCase().contains(value.toLowerCase())) {
+                    searchResults.add(data.get(i));
+                    break;
+                }
+            }
+        }
+        return searchResults;
     }
+
+    // TODO - implement this method; did so on line 66 of TechJobs_JobData.findByValue(searchField);
 
     /**
      * Read in data from a CSV file and store it in a list
